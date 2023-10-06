@@ -1,7 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png"
+import { useContext } from "react";
+import { AuthContextApi } from "../../authContextAPI/AuthContext";
 
 const Navbar = () => {
+    const {user,logOut} = useContext(AuthContextApi)
     const liStyle = {
         marginRight: '40px',
         color: '#fff'
@@ -12,6 +15,13 @@ const Navbar = () => {
         <li style={liStyle}><NavLink to='/blog'>Blog</NavLink></li>
         <li style={liStyle}><NavLink to='/contact'>Contact</NavLink></li>
     </>
+    const handleLogout = () => {
+        logOut()
+            .then(() => {
+                alert('Sign Out Completed!')
+            })
+            .catch()
+    }
     return (
         <div className="navbar  py-7">
             <div className="navbar-start">
@@ -34,7 +44,12 @@ const Navbar = () => {
                         {navLink}
                     </ul>
                 </div>
-                <Link to='/login' className=" px-6 py-2 rounded-lg cursor-pointer border-[#d98908]  hover:bg-[#d98908] bg-[#F9A51A] font-semibold text-lg normal-case">Login</Link>
+                {
+                    user ? <Link to='/login' onClick={handleLogout} className=" px-6 py-2 rounded-lg cursor-pointer border-[#d98908]  hover:bg-[#d98908] bg-[#F9A51A] font-semibold text-lg normal-case">Sign Out</Link>
+                        
+                    :<Link to='/login' className=" px-6 py-2 rounded-lg cursor-pointer border-[#d98908]  hover:bg-[#d98908] bg-[#F9A51A] font-semibold text-lg normal-case">Login</Link>
+                }
+                
             </div>
         </div>
     );

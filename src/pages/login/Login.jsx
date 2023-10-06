@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavbarLR from "../../components/header/NavbarLR";
 import { BiLogoFacebookCircle } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
@@ -7,6 +7,7 @@ import { AuthContextApi } from "../../authContextAPI/AuthContext";
 
 const Login = () => {
     const { loginAccount } = useContext(AuthContextApi);
+    const navigate = useNavigate()
 
     const handleLogin = e => {
         e.preventDefault();
@@ -18,9 +19,16 @@ const Login = () => {
 
         // account login 
         loginAccount(email, password)
-            .then(() => {
-                alert('Login Successfully!');
-                e.target.reset();
+            .then((result) => {
+                if (result.user.emailVerified) {
+                    alert('Login Successfully!');
+                    e.target.reset();
+                    navigate('/')
+                }
+                else {
+                    alert('Please verify your email address')
+                }
+               
             })
             .catch(error => console.log(error.message));
     }
